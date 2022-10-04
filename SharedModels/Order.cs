@@ -7,7 +7,7 @@ namespace SharedModels
     {
         public int Id { get; set; }
         public DateTime? Date { get; set; }
-        public int? customerId { get; set; }
+        public int customerId { get; set; }
         public OrderStatus Status { get; set; }
         public IList<OrderLine> OrderLines { get; set; }
 

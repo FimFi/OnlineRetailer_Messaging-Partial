@@ -19,8 +19,8 @@ namespace CustomerApi.Controllers
             return _repo.GetAll();
         }
         //get by customerId
-        [Route("GetCustomer/{id}")]
-        public IActionResult GetCustomer(int id) 
+        [HttpGet("{id}", Name = "GetCustomer")]
+        public IActionResult Get(int id) 
         {
             var item = _repo.Get(id);
             if (item == null) 

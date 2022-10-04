@@ -13,14 +13,17 @@ namespace OrderApi.Controllers
     {
         IOrderRepository repository;
         IServiceGateway<ProductDto> productServiceGateway;
+        IServiceGateway<CustomerDto> _customerServiceGateway;
         IMessagePublisher messagePublisher;
 
         public OrdersController(IRepository<Order> repos,
             IServiceGateway<ProductDto> gateway,
+            IServiceGateway<CustomerDto> customerServiceGateway,
             IMessagePublisher publisher)
         {
             repository = repos as IOrderRepository;
             productServiceGateway = gateway;
+            _customerServiceGateway = customerServiceGateway;
             messagePublisher = publisher;
         }
 
@@ -50,6 +53,17 @@ namespace OrderApi.Controllers
             if (order == null)
             {
                 return BadRequest();
+            }
+           
+
+            if (CustomerAvailable(order))
+            {
+                return BadRequest("Customer could not be found");
+            }
+            var customer = messagePublisher.RequestCustomer(order.customerId);
+            if (customer.IsCompleted) 
+            {
+                return BadRequest("Not enough credit for customer");
             }
 
             if (ProductItemsAvailable(order))
@@ -89,6 +103,16 @@ namespace OrderApi.Controllers
                     return false;
                 }
             }
+            return true;
+        }
+
+        private bool CustomerAvailable(Order order) 
+        {
+                var orderCustomer = _customerServiceGateway.Get(order.customerId);
+                if (orderCustomer == null) 
+                {
+                    return false;
+                }
             return true;
         }
 

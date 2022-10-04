@@ -10,9 +10,9 @@ namespace CustomerApi.Data
         {
             _context = context;
         }
-        Customer IRepository<Customer>.Add(Customer customer)
+        Customer IRepository<Customer>.Add(Customer entity)
         {
-            var newCustomer = _context.Customers.Add(customer);
+            var newCustomer = _context.Customers.Add(entity).Entity;
             _context.SaveChanges();
             return newCustomer;
         }

@@ -19,7 +19,7 @@ namespace OrderApi.Infrastructure
             bus.Dispose();
         }
 
-        public void PublishOrderStatusChangedMessage(int? customerId, IList<OrderLine> orderLines, string topic)
+        public void PublishOrderStatusChangedMessage(int customerId, IList<OrderLine> orderLines, string topic)
         {
             var message = new OrderStatusChangedMessage
             { 
@@ -30,5 +30,12 @@ namespace OrderApi.Infrastructure
             bus.PubSub.Publish(message, topic);
         }
 
+        public async Task<CustomerDto> RequestCustomer(int id) 
+        {
+
+            var request = new RequestedCustomer { CustomerId = id };
+            var response = await bus.Rpc.RequestAsync<RequestedCustomer, CustomerDto>(request);
+            return response;
+        }
     }
 }
