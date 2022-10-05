@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.ResponseCompression;
 using OrderApi.Data;
 using OrderApi.Infrastructure;
 using RestSharp;
@@ -18,10 +17,7 @@ namespace OrderApi.Controllers
         IServiceGateway<CustomerDto> _customerServiceGateway;
         IMessagePublisher messagePublisher;
 
-        public OrdersController(IRepository<Order> repos,
-            IServiceGateway<ProductDto> gateway,
-            IServiceGateway<CustomerDto> customerServiceGateway,
-            IMessagePublisher publisher)
+        public OrdersController(IRepository<Order> repos, IServiceGateway<ProductDto> gateway, IServiceGateway<CustomerDto> customerServiceGateway, IMessagePublisher publisher)
         {
             repository = repos as IOrderRepository;
             productServiceGateway = gateway;
@@ -50,26 +46,21 @@ namespace OrderApi.Controllers
 
         // POST orders
         [HttpPost]
-        public IActionResult Post([FromBody]Order order)
+        public IActionResult Post([FromBody] Order order)
         {
             if (order == null)
             {
                 return BadRequest();
             }
-           
-            if(!checkcreditstanding(order.customerId))
+
+            if (!CustomerAvailable(order.customerId))
             {
-                return BadRequest("Customer has an unpaid bill");
-            }
-            if (!CheckCustomer(order.customerId))
-            {
-                
+
                 return BadRequest("Customer could not be found");
             }
-            var customer = messagePublisher.RequestCustomer(order.customerId);
-            if (customer.IsCompleted) 
+            if (!CheckCreditStanding(order.customerId))
             {
-                return BadRequest("Not enough credit for customer");
+                return BadRequest("Customer has an unpaid bill");
             }
 
             if (ProductItemsAvailable(order))
@@ -98,8 +89,10 @@ namespace OrderApi.Controllers
             }
         }
 
+
         private bool ProductItemsAvailable(Order order)
         {
+            
             foreach (var orderLine in order.OrderLines)
             {
                 // Call product service to get the product ordered.
@@ -111,7 +104,7 @@ namespace OrderApi.Controllers
             }
             return true;
         }
-        private bool checkcreditstanding(int id)
+        private bool CheckCreditStanding(int id)
         {
             RestClient c = new RestClient("http://customerapi/customer/");
 
@@ -127,33 +120,17 @@ namespace OrderApi.Controllers
 
         }
        
-        private bool CheckCustomer(int id)
-        {
-            RestClient c = new RestClient("http://customerapi/customer/");
-
-            var request = new RestRequest(id.ToString());
-            var response = c.Execute<CustomerDto>(request);
-            if (response.Data != null)
-            {
-               
-                
-                 return response.Data.CreditStanding;
-                
-            }
-           
-            else
+            private bool CustomerAvailable(int id) 
+                {
+                var orderCustomer = _customerServiceGateway.Get(id);
+            if (orderCustomer.Id == 0)
             {
                 return false;
             }
-        }
-            private bool CustomerAvailable(Order order) 
-        {
-                var orderCustomer = _customerServiceGateway.Get(order.customerId);
-                if (orderCustomer == null) 
-                {
-                    return false;
-                }
-            return true;
+            else {
+                return true;
+            }
+            
         }
 
         // PUT orders/5/cancel

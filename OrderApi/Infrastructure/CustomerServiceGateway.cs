@@ -14,12 +14,22 @@ namespace OrderApi.Infrastructure
 
         public CustomerDto Get(int id)
         {
-            RestClient c = new RestClient(customerServiceBaseUrl);
+            RestClient c = new RestClient("http://customerapi/customer/");
 
             var request = new RestRequest(id.ToString());
             var response = c.Execute<CustomerDto>(request);
-            
-            return response.Data;
+            if (response.Data != null)
+            {
+
+
+                return response.Data;
+
+            }
+
+            else
+            {
+                return null;
+            }
         }
     }
 }
