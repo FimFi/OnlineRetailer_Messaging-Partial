@@ -17,9 +17,9 @@ namespace OrderApi.Infrastructure
             RestClient c = new RestClient(customerServiceBaseUrl);
 
             var request = new RestRequest(id.ToString());
-            var response = c.GetAsync<CustomerDto>(request);
-            response.Wait();
-            return response.Result;
+            var response = c.Execute<CustomerDto>(request);
+            
+            return response.Data;
         }
     }
 }

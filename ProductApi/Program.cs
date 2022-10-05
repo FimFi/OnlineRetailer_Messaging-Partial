@@ -9,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 // RabbitMQ connection string (I use CloudAMQP as a RabbitMQ server).
 // Remember to replace this connectionstring with your own.
 string cloudAMQPConnectionString =
-   "host=cow-01.rmq2.cloudamqp.com;virtualHost=zxzgvamj;username=zxzgvamj;password=NRNweuTkG5We7yxwaKdu4EDhhkD6z_lL";
+   "host=hawk-01.rmq.cloudamqp.com;virtualHost=dqslqjpf;username=dqslqjpf;password=T31Zdro1hILZQtaYuk1VBAUDC7ISp6Ec";
 
 // Add services to the container.
 

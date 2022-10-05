@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.ResponseCompression;
 using OrderApi.Data;
 using OrderApi.Infrastructure;
+using RestSharp;
 using SharedModels;
 
 namespace OrderApi.Controllers
@@ -55,9 +57,13 @@ namespace OrderApi.Controllers
                 return BadRequest();
             }
            
-
-            if (CustomerAvailable(order))
+            if(!checkcreditstanding(order.customerId))
             {
+                return BadRequest("Customer has an unpaid bill");
+            }
+            if (!CheckCustomer(order.customerId))
+            {
+                
                 return BadRequest("Customer could not be found");
             }
             var customer = messagePublisher.RequestCustomer(order.customerId);
@@ -105,8 +111,42 @@ namespace OrderApi.Controllers
             }
             return true;
         }
+        private bool checkcreditstanding(int id)
+        {
+            RestClient c = new RestClient("http://customerapi/customer/");
 
-        private bool CustomerAvailable(Order order) 
+            var request = new RestRequest(id.ToString());
+            var response = c.Execute<CustomerDto>(request);
+            if (response.Data.CreditStanding != false)
+            {
+                return response.Data.CreditStanding;
+
+            }
+            return false;
+
+
+        }
+       
+        private bool CheckCustomer(int id)
+        {
+            RestClient c = new RestClient("http://customerapi/customer/");
+
+            var request = new RestRequest(id.ToString());
+            var response = c.Execute<CustomerDto>(request);
+            if (response.Data != null)
+            {
+               
+                
+                 return response.Data.CreditStanding;
+                
+            }
+           
+            else
+            {
+                return false;
+            }
+        }
+            private bool CustomerAvailable(Order order) 
         {
                 var orderCustomer = _customerServiceGateway.Get(order.customerId);
                 if (orderCustomer == null) 
