@@ -106,16 +106,15 @@ namespace OrderApi.Controllers
         }
         private bool CheckCreditStanding(int id)
         {
-            RestClient c = new RestClient("http://customerapi/customer/");
-
-            var request = new RestRequest(id.ToString());
-            var response = c.Execute<CustomerDto>(request);
-            if (response.Data.CreditStanding != false)
+            var orderCustomer = _customerServiceGateway.Get(id);
+            if (orderCustomer.CreditStanding == false)
             {
-                return response.Data.CreditStanding;
-
+                return false;
             }
-            return false;
+            else
+            {
+                return true;
+            }
 
 
         }
