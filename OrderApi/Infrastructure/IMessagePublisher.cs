@@ -7,6 +7,5 @@ namespace OrderApi.Infrastructure
     {
         void PublishOrderStatusChangedMessage(int customerId,
             IList<OrderLine> orderLines, string topic);
-        Task<CustomerDto> RequestCustomer(int id);
     }
 }

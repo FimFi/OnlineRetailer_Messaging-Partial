@@ -29,13 +29,5 @@ namespace OrderApi.Infrastructure
 
             bus.PubSub.Publish(message, topic);
         }
-
-        public async Task<CustomerDto> RequestCustomer(int id) 
-        {
-
-            var request = new RequestedCustomer { CustomerId = id };
-            var response = await bus.Rpc.RequestAsync<RequestedCustomer, CustomerDto>(request);
-            return response;
-        }
     }
 }
