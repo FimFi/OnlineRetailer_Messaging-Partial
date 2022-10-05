@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using OrderApi.Data;
 using OrderApi.Infrastructure;
-using RestSharp;
 using SharedModels;
 
 namespace OrderApi.Controllers
