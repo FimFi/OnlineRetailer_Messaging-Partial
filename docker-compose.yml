@@ -19,3 +19,28 @@ services:
       context: .
       dockerfile: CustomerApi/Dockerfile
 
+  apigateway:
+    image: ${DOCKER_REGISTRY-}apigateway
+    build:
+      context: .
+      dockerfile: APIGateWay/Dockerfile
+
+  prometheus:
+    image: prom/prometheus:v2.34.0
+    ports:
+      - "10090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      
+  grafana:
+    image: grafana/grafana:8.4.5
+    ports:
+      - "3000:3000"
+      
+    
+
+ 
+
+
+  
+

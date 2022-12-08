@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using OrderApi.Data;
 using OrderApi.Infrastructure;
+using Prometheus;
 using SharedModels;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,7 +15,7 @@ string customerServiceBaseUrl = "http://customerapi/customer/";
 // RabbitMQ connection string (I use CloudAMQP as a RabbitMQ server).
 // Remember to replace this connectionstring with your own.
 string cloudAMQPConnectionString =
-   "host=cow-01.rmq2.cloudamqp.com;virtualHost=zxzgvamj;username=zxzgvamj;password=NRNweuTkG5We7yxwaKdu4EDhhkD6z_lL";
+   "host=hawk-01.rmq.cloudamqp.com;virtualHost=dqslqjpf;username=dqslqjpf;password=T31Zdro1hILZQtaYuk1VBAUDC7ISp6Ec";
 
 // Add services to the container.
 
@@ -63,8 +64,15 @@ using (var scope = app.Services.CreateScope())
 
 //app.UseHttpsRedirection();
 
+app.UseHttpMetrics();
+
+app.UseRouting();
+
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapMetrics();
+
 
 app.Run();

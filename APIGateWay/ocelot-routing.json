@@ -1,0 +1,59 @@
+﻿{
+  "Routes": [
+
+    {
+      // ProductApi routes
+      "DownstreamPathTemplate": "/{catchAll}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "productapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/productapi/{catchAll}",
+      "UpstreamHttpMethod": [ "Get" ]
+    },
+
+    {
+      // OrderApi routes
+      "DownstreamPathTemplate": "/{catchAll}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "orderapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/orderapi/{catchAll}",
+      "UpstreamHttpMethod": [ "Get", "Post" ]
+    },
+
+    {
+      // CustomerApi routes
+      "DownstreamPathTemplate": "/{catchAll}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "customerapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/customerapi/{catchAll}",
+      "UpstreamHttpMethod": [ "Get", "Post" ]
+    },
+    "RateLimitOptions"
+    :
+    {
+      "ClientWhitelist": [],
+      "EnableRateLimiting": true,
+      "Limit": 1,
+      "Period": "5s",
+      "PeriodTimespan": 1
+    }
+  ],
+  // Global configuration
+  "GlobalConfiguration": {
+    "BaseUrl": "http://localhost:7430"
+  }
+}

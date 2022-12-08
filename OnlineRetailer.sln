@@ -10,7 +10,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedModels", "SharedModel
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{1E5D6C1F-82ED-4307-A781-8C9B08145B36}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomerApi", "CustomerApi\CustomerApi.csproj", "{B26A9BF6-BEBD-4B98-8DBF-74038709838F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomerApi", "CustomerApi\CustomerApi.csproj", "{B26A9BF6-BEBD-4B98-8DBF-74038709838F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "kubberneters", "kubberneters", "{BB53CA8E-40E7-4609-9561-5747D36C0395}"
+	ProjectSection(SolutionItems) = preProject
+		customerapi.yaml = customerapi.yaml
+		orderapi.yaml = orderapi.yaml
+		productapi.yaml = productapi.yaml
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APIGateWay", "APIGateWay\APIGateWay.csproj", "{2E2FEBBD-199D-4DA0-81B6-606395410BC7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,6 +47,10 @@ Global
 		{B26A9BF6-BEBD-4B98-8DBF-74038709838F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B26A9BF6-BEBD-4B98-8DBF-74038709838F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B26A9BF6-BEBD-4B98-8DBF-74038709838F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E2FEBBD-199D-4DA0-81B6-606395410BC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E2FEBBD-199D-4DA0-81B6-606395410BC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E2FEBBD-199D-4DA0-81B6-606395410BC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E2FEBBD-199D-4DA0-81B6-606395410BC7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
