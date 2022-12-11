@@ -14,15 +14,17 @@ namespace OrderApi.Infrastructure
 
         public CustomerDto Get(int id)
         {
-            RestClient c = new RestClient("http://customerapi/customer/");
+            RestClient c = new RestClient(customerServiceBaseUrl);
 
             var request = new RestRequest(id.ToString());
-            var response = c.Execute<CustomerDto>(request);
-            if (response.Data != null)
+            var response = c.GetAsync<CustomerDto>(request);
+            response.Wait();
+            
+            if (response.Result != null)
             {
 
 
-                return response.Data;
+                return response.Result;
 
             }
 

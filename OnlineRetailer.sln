@@ -10,7 +10,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedModels", "SharedModel
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{1E5D6C1F-82ED-4307-A781-8C9B08145B36}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomerApi", "CustomerApi\CustomerApi.csproj", "{B26A9BF6-BEBD-4B98-8DBF-74038709838F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomerApi", "CustomerApi\CustomerApi.csproj", "{B26A9BF6-BEBD-4B98-8DBF-74038709838F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Kubernetes", "Kubernetes", "{1936C056-D4A0-494D-B2C4-72518D97469B}"
+	ProjectSection(SolutionItems) = preProject
+		customerapi.yml = customerapi.yml
+		orderapi.yml = orderapi.yml
+		productapi.yml = productapi.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Prometheus", "Prometheus", "{A915E0DA-82B5-42AE-ABE1-CB4B2EC1B2C1}"
+	ProjectSection(SolutionItems) = preProject
+		prometheus.yml = prometheus.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

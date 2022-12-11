@@ -18,4 +18,3 @@ services:
     build:
       context: .
       dockerfile: CustomerApi/Dockerfile
-
