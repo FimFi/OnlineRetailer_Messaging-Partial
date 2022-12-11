@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <DockerComposeProjectPath>../docker-compose.dcproj</DockerComposeProjectPath>
-    <UserSecretsId>f3f99d8c-a320-4ff7-ae3d-a2c68761eea5</UserSecretsId>
+    <UserSecretsId>e96e82d1-c16a-49ff-a894-c402e09deedd</UserSecretsId>
   </PropertyGroup>
 
 
@@ -13,14 +13,15 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
   <ItemGroup>
+	  <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
+	<PackageReference Include="Microsoft.ApplicationInsights.ServiceFabric.Native" Version="2.2.1" />	  
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.21.0" />
-	<PackageReference Include="Microsoft.ApplicationInsights.ServiceFabric.Native" Version="2.2.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.9" />
-    <PackageReference Include="EasyNetQ" Version="7.0.4" />
     <PackageReference Include="Microsoft.ServiceFabric.AspNetCore.Kestrel" Version="6.1.1436" />
-	  <PackageReference Include="Microsoft.ServiceFabric.Diagnostics.Internal" Version="6.1.1436" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="prometheus-net.AspNetCore" Version="6.0.0" />
+    <PackageReference Include="RestSharp" Version="108.0.1" />
+    <PackageReference Include="EasyNetQ" Version="7.0.4" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
 	<PackageReference Include="Microsoft.ServiceFabric.Services" Version="6.1.1436" />
   </ItemGroup>
@@ -28,9 +29,6 @@
     <ProjectReference Include="..\SharedModels\SharedModels.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Newtonsoft.Json" />

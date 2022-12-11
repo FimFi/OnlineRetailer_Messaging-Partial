@@ -1,63 +1,37 @@
-using CustomerApi.Data;
-using CustomerApi.Infrastructure;
-using CustomerApi.Models;
-using Microsoft.EntityFrameworkCore;
-using Prometheus;
-using SharedModels;
+namespace CustomerApi { 
 
-var builder = WebApplication.CreateBuilder(args);
-
-// RabbitMQ connection string (I use CloudAMQP as a RabbitMQ server).
-// Remember to replace this connectionstring with your own.
-string cloudAMQPConnectionString =
-   "host=hawk-01.rmq.cloudamqp.com;virtualHost=dqslqjpf;username=dqslqjpf;password=T31Zdro1hILZQtaYuk1VBAUDC7ISp6Ec";
-
-// Add services to the container.
-builder.Services.AddDbContext<CustomerApiContext>(opt => opt.UseInMemoryDatabase("CustomersDb"));
-
-builder.Services.AddScoped<IRepository<Customer>, CustomerRepository>();
-
-builder.Services.AddTransient<IDbInitializer, DbInitializer>();
-
-builder.Services.AddSingleton<IConverter<Customer, CustomerDto>, CustomerConverter>();
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+    using Microsoft.ServiceFabric.Services.Runtime;
+    using System.Diagnostics;
+    internal static class Program
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    /// <summary>
+    /// This is the entry point of the service host process.
+    /// </summary>
+    private static void Main()
+    {
+        try
+        {
+            // The ServiceManifest.XML file defines one or more service type names.
+            // Registering a service maps a service type name to a .NET type.
+            // When Service Fabric creates an instance of this service type,
+            // an instance of the class is created in this host process.
+
+            ServiceRuntime.RegisterServiceAsync("ProductApiType",
+                context => new CustomerApi(context)).GetAwaiter().GetResult();
+
+            ServiceEventSource.Current.ServiceTypeRegistered(Process.GetCurrentProcess().Id, typeof(CustomerApi).Name);
+
+            // Prevents this host process from terminating so services keep running.
+            Thread.Sleep(Timeout.Infinite);
+
+        }
+        catch (Exception e)
+        {
+            ServiceEventSource.Current.ServiceHostInitializationFailed(e.ToString());
+            throw;
+        }
+    }
+
+}
 }
 
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    var dbContext = services.GetService<CustomerApiContext>();
-    var dbInitializer = services.GetService<IDbInitializer>();
-    dbInitializer.Initialize(dbContext);
-}
-
-// Create a message listener in a separate thread.
-Task.Factory.StartNew(() =>
-    new Listener(app.Services, cloudAMQPConnectionString).Start());
-
-//app.UseHttpsRedirection();
-
-
-app.UseHttpMetrics();
-
-app.UseRouting();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.MapMetrics();
-    
-app.Run();
