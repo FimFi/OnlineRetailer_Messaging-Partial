@@ -5,13 +5,17 @@
 
 namespace ProductApi
 {
+    using global::ProductApi.Data;
+    using global::ProductApi.Models;
     using Microsoft.ApplicationInsights.Extensibility;
     using Microsoft.ApplicationInsights.ServiceFabric.Module;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Logging;
+    using SharedModels;
 
     public class Startup
     {
@@ -34,7 +38,14 @@ namespace ProductApi
             
 
             services.AddMvc();
-            
+            services.AddDbContext<ProductApiContext>(opt => opt.UseInMemoryDatabase("ProductsDb"));
+            services.AddScoped<IRepository<Product>, ProductRepository>();
+            services.AddTransient<IDbInitializer, DbInitializer>();
+            services.AddSingleton<IConverter<Product, ProductDto>, ProductConverter>();
+            services.AddControllers();
+            services.AddEndpointsApiExplorer();
+            services.AddSwaggerGen();
+
 
         }
 
@@ -43,7 +54,10 @@ namespace ProductApi
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI();
+
+
             }
             else
             {
@@ -51,6 +65,8 @@ namespace ProductApi
             }
 
             app.UseMvc();
+            app.UseRouting();
+            app.UseAuthorization();
         }
 
         /* var builder = WebApplication.CreateBuilder(args);
